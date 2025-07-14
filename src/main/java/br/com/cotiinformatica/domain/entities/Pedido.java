@@ -33,26 +33,25 @@ public class Pedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "id")
-	
 	private UUID id;
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_pedido", nullable = false)
-	
 	private LocalDate dataPedido;
+
 	@Column(name = "valor_pedido", nullable = false, precision = 15, scale = 2)
-	
 	private BigDecimal valorPedido;
+
 	@Column(name = "nome_cliente", nullable = false, length = 100)
-	
 	private String nomeCliente;
+
 	@Column(name = "descricao_pedido", length = 500)
-	
 	private String descricaoPedido;
+
 	@Column(name = "ativo", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-	
-	private Boolean ativo;
+	private Boolean ativo = true;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
-	
 	private StatusPedido status;
 }
