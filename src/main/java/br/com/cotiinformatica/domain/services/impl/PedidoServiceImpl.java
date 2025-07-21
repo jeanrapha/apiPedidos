@@ -35,16 +35,16 @@ public class PedidoServiceImpl implements PedidoService {
 		var pedido = mapper.map(model, Pedido.class);
 
 		// Salvando o pedido no banco de dados
-		pedidoRepository.save(pedido);
+		var pedidoCriado = pedidoRepository.save(pedido);
 
 		// Criando um evento "PedidoCriado" com os dados do pedido
-		var event = new PedidoCriadoEvent(pedido.getId(), pedido.getDataPedido(), pedido.getValorPedido(),
-				pedido.getNomeCliente(), pedido.getDescricaoPedido(), pedido.getStatus().toString());
+		var event = new PedidoCriadoEvent(pedidoCriado.getId(), pedidoCriado.getDataPedido(), pedidoCriado.getValorPedido(),
+				pedidoCriado.getNomeCliente(), pedidoCriado.getDescricaoPedido(), pedidoCriado.getStatus().toString());
 
 		// Criando um registro para a tabela de saída (OutboxMessage)
 		var message = new OutboxMessage();
 		message.setAggregateType("Pedido"); // nome da entidade
-		message.setAggregateId(pedido.getId().toString()); // id do pedido
+		message.setAggregateId(pedidoCriado.getId().toString()); // id do pedido
 		message.setType("PedidoCriado"); // nome do evento
 
 		try {
@@ -58,7 +58,7 @@ public class PedidoServiceImpl implements PedidoService {
 		outboxMessageRepository.save(message);
 
 		// Retornando os dados do pedido cadastrado
-		return mapper.map(pedido, PedidoResponseModel.class);
+		return mapper.map(pedidoCriado, PedidoResponseModel.class);
 	}
 
 	@Override
@@ -66,7 +66,6 @@ public class PedidoServiceImpl implements PedidoService {
 		var pedido = pedidoRepository.findByIdAndAtivo(id).orElseThrow(() -> new PedidoNaoEncontradoException(id));
 
 		mapper.map(model, pedido);
-
 		pedidoRepository.save(pedido);
 
 		return mapper.map(pedido, PedidoResponseModel.class);
