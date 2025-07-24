@@ -42,9 +42,12 @@ services:
    networks:
      - apiPedidos-network # Nome da rede compartilhada
 networks:
- apiPedidos-network: # Nome da rede
-   driver: bridge # Rede compartilhada
+  apiPedidos-network: # Nome da rede
+    external: true # Rede pública
 volumes:
  postgres-data: #Registrando o local para armazenamento dos dados
 
 
+
+ 
+ 
